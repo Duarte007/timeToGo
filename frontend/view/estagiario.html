@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Calculador de horário">
+    <meta name="author" content="Matheus Duarte">
+    <title>Cálculo de Horário</title>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="./node_modules/moment/moment.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../../template/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../template/css/simple-sidebar.css" rel="stylesheet">
+    <link href="./css/backButton.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/style.css" media="screen, handheld" />
+
+</head>
+
+<body>
+    
+    
+    <div id="header" class="header">
+        <a id="menu-toggle" href="#menu-toggle"><img src="img/menu4.png"  width="30" height="35" left="100%"  style="padding-top:6px; position:absolute" /></a>
+        <a id="identifier">Estagiário</a>
+    </div>
+    <!-- /#header -->
+    
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="../../index.html">
+                        Horário de Jornada
+                    </a>
+                </li>
+                <li>
+                    <a id="#estagiario" href="estagiario.html" >Estagiário</a>
+                </li>
+                <li>
+                    <a id="#clt" href="clt.html">CLT</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            
+            <div id="alert" class="alert alert-danger" role="alert">
+              Só é possível adicionar intervalos com o checkbox marcado!
+            </div>
+            
+            <h3>Cálculo de Horário</h3>
+            
+            <div id="intervals" class="container-fluid">
+                
+                <div class="input-group mb-3">
+                    
+                    <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Horário de Entrada </span>
+                    </div>
+                    
+                    <input id="B00" type="time" class="form-control" placeholder="HH:mm" maxLength = "5">
+                    <span class="input-group-text" id="basic-addon1">Horas Negativas </span>
+                    <input id="HN00" type="time" class="form-control" placeholder="HH:mm" maxLength = "5">
+                </div><br>
+                
+                
+                <input type = "checkbox" onclick = "changeValue(id);" id = "hasInterval" value = "S" checked>
+                <label for = "hasInterval"> Fez intervalo? </label>
+                
+                
+                <div class="isVisible">
+                    <h3>Intervalo 1</h3>
+                    
+            		<div class="input-group mb-3" id="interval">
+            		    
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" width="80px !important" id="basic-addon1">Horário de Saída </span>
+                        </div>
+                        
+                        <input id="inputSaida0" type="time" class="form-control" placeholder="HH:mm" aria-label="HrSaida" aria-describedby="basic-addon1" maxLength = "5">
+                        
+                    </div>
+                    
+                    
+            		<div class="input-group mb-3" id="interval">
+            		    
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Horário de Entrada </span>
+                        </div>
+                        <input id="inputEntrada0" type="time" class="form-control" placeholder="HH:mm" aria-label="HrEntrada" aria-describedby="basic-addon1" maxLength = "5">
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <!-- /#intervals -->
+            
+            <br><br>
+            
+            <div class="container-fluid">
+			    
+                <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Hora de ir embora :)</span>
+                      </div>
+                      <input id="B03" type="text" class="form-control" placeholder="HH:mm" aria-label="HrSaida" aria-describedby="basic-addon1" readonly>
+                </div>
+                
+                <div class="teste">
+                     <button onclick="getOutputHour();" class="btn btn-danger" id="menu-toggle">Calcular</button>
+                </div>
+                
+            </div>
+            <!-- /#container-fluid -->
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    
+    <div class="footer">
+        <div id="footer" class="container-fluid">
+            <a id="addInput" href="javascript:void(0)"><img src="img/add.png" width="40" height="35"/></a>
+        </div>
+    </div>
+    <!-- /#footer -->
+
+    
+
+    <!-- Bootstrap core JavaScript -->
+    <!--<script src="../../template/vendor/jquery/jquery.min.js"></script>-->
+    <script src="../../template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        
+        var count = 1;
+        var justifyInterval = 10;
+	    var scntDiv = $('#intervals');
+	    
+        function getOutputHour(){
+            var hrInput = $('#B00')[0].value;
+            var hrNegative = $('#HN00')[0].value.length != 0 ? moment($('#HN00')[0].value, "HH:mm") : moment("00:00", "HH:mm");
+            var div = $('#page-content-wrapper');
+            var interval = moment("00:00", 'HH:mm');
+            for(var i=0 ; i<count ; i++){
+                var hrSaida = moment($('#inputSaida'+i+'')[0].value, 'HH:mm').hours();
+                var mnSaida = moment($('#inputSaida'+i+'')[0].value, 'HH:mm').minutes();
+                var hrEntrada = moment($('#inputEntrada'+i+'')[0].value, 'HH:mm');
+                hrEntrada.subtract(hrSaida, 'hours').subtract(mnSaida, 'minutes');
+                interval.add(moment(hrEntrada._d).format('HH'), 'hours');
+                interval.add(moment(hrEntrada._d).format('mm'), 'minutes');
+            }
+
+            var hrOutput = moment(hrInput, "HH:mm").add((6+interval.hours()+hrNegative.hours()), "hours").add((interval.minutes()+hrNegative.minutes()-justifyInterval), "minutes");
+            // var hrOutput = this.calculateTime(hrInput, hrLunch, hrReturn);
+            
+            $('#B03')[0].value = hrOutput.format('HH:mm');
+        };
+        
+        function changeValue(id){
+            if(document.getElementById(id).checked){
+                document.getElementById(id).value = "S";
+                document.getElementById("addInput").href = "javascript:void(0)";
+                document.getElementById('alert').style.display = "none";
+                justifyInterval = 10;
+            }else{
+                document.getElementById(id).value = "N";
+                document.getElementById("addInput").href = "";
+                if(document.getElementById('remInput')){
+                    var all = count;
+                    for(var i=0 ; i<all-1 ; i++){
+                        this.removeInput(null, document.getElementById('remInput'));
+                    }
+                }
+                justifyInterval = 0;
+            }
+        };
+       
+	   this.addInout = $(document).on('click', '#addInput', function () {
+	        if(document.getElementById("hasInterval").value == 'S'){
+	            document.getElementById('alert').style.display = "none";
+    	        $('<p>'+
+    	            '<div id="dynamic'+count+'">'+
+        	            '<h3>Intervalo '+(count+1)+'</h3>'+
+                		'<div class="input-group mb-3" id="interval">'+
+                            '<div class="input-group-prepend">'+
+                                '<span class="input-group-text" width="80px !important" id="basic-addon1">Horário de Saída </span>'+
+                            '</div>'+
+                            '<input id="inputSaida'+count+'" type="time" class="form-control" placeholder="HH:mm" maxLength = "5">'+
+                        '</div>'+
+                		'<div class="input-group mb-3" id="interval">'+
+                            '<div class="input-group-prepend">'+
+                                '<span class="input-group-text" id="basic-addon1">Horário de Entrada </span>'+
+                            '</div>'+
+                            '<input id="inputEntrada'+count+'" type="time" class="form-control" placeholder="HH:mm" maxLength = "5">'+
+                        '</div>'+
+                        '<a class="btn btn-danger" onclick="removeInput(event)" id="remInput">'+
+    			        	'<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>'+
+    			        	'Remover Intervalo'+    
+    					'</a>'+
+                    '</div>'+
+    			'</p>').appendTo(scntDiv);
+    			count++;
+	        }else{
+	            document.getElementById('alert').style.display = "block";
+	        }
+	        return false;
+	    });
+	    
+	    function removeInput (event, button) {
+	        var buttonRemove;
+	        if(event === null)
+	            buttonRemove = button;
+	        else
+	            buttonRemove = event.currentTarget;
+            buttonRemove.parentElement.remove();
+            count--;
+	        return false;
+	    };
+       
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        
+        
+    </script>
+
+</body>
+
+</html>

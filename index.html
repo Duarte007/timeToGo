@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Calculador de horário">
+    <meta name="author" content="Matheus Duarte">
+
+    <title>Cálculo de Horário</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./template/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./template/css/simple-sidebar.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./frontend/view/css/style.css" media="screen, handheld" />
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+        
+        <div id="header" class="header"></div>
+
+        
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Horário de Jornada
+                    </a>
+                </li>
+                <li>
+                    <a id="#estagiario" href="./frontend/view/estagiario.html" >Estagiário</a>
+                </li>
+                <li>
+                    <a id="#clt" href="./frontend/view/clt.html">CLT</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        
+        
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <h1>Cálculo de Horário</h1>
+                <p>Consulta seu horário sem fazer conta ai</p>
+                <a href="#menu-toggle" class="btn btn-danger" id="menu-toggle">Calcular Horário</a>
+                
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+        
+        <div id="footer" class="footer"></div>
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="./template/vendor/jquery/jquery.min.js"></script>
+    <script src="./template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    
+    </script>
+    
+
+</body>
+
+</html>

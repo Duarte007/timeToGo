@@ -1,0 +1,15 @@
+.botoes-items {
+   text-align:center;
+   margin: auto;
+}
+
+.botoes {
+   display:inline;
+   text-align: back;
+   float: left;
+}
+
+.teste {
+    margin-right: 3px;
+    padding: 0 5px;
+}

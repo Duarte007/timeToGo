@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Calculador de horário">
+    <meta name="author" content="Matheus Duarte">
+    <title>Cálculo de Horário</title>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="./node_modules/moment/moment.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="../../template/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../template/css/simple-sidebar.css" rel="stylesheet">
+    <link href="backButton.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen, handheld" />
+    
+    
+</head>
+
+<body>
+    <div id="header" class="header">
+        <a id="menu-toggle" href="#menu-toggle"><img src="img/menu4.png" width="30" height="35" left="100%"/></a>
+        <a id="identifier">CLT</a>
+    </div>
+    
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="../../index.html">
+                        Horário de Jornada
+                    </a>
+                </li>
+                <li>
+                    <a id="#estagiario" href="estagiario.html" >Estagiário</a>
+                </li>
+                <li>
+                    <a id="#clt" href="clt.html">CLT</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        
+        <!-- /#header -->
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            
+            <div id="alert" class="alert alert-danger" role="alert">
+              Insira o horário de entrada.
+            </div>
+            
+            <h3>Cálculo de Horário</h3>
+            
+            <div id="intervals" class="container-fluid">
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Horário de Entrada </span>
+                  </div>
+                  <input id="B00" type="time" class="form-control" placeholder="HH:mm" aria-label="HrEntrada" aria-describedby="basic-addon1">
+                </div><br>
+                
+                <h3>Intervalo 1</h3>
+        		<div class="input-group mb-3" id="interval">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" width="80px !important" id="basic-addon1">Horário de Saída </span>
+                    </div>
+                    <input id="inputSaida0" type="time" class="form-control" placeholder="HH:mm" aria-label="HrSaida" aria-describedby="basic-addon1">
+                </div>
+        		<div class="input-group mb-3" id="interval">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Horário de Entrada </span>
+                    </div>
+                    <input id="inputEntrada0" type="time" class="form-control" placeholder="HH:mm" aria-label="HrEntrada" aria-describedby="basic-addon1">
+                </div>
+                
+            </div>
+           <!-- /#intervals -->
+           <br><br>
+           <div class="container-fluid">
+               
+               <div class="input-group mb-3" id="banco">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" width="80px !important" id="basic-addon1">Banco de Horas</span>
+                    </div>
+                    <input id="inputBanco" type="time" class="form-control" placeholder="HH:mm" aria-describedby="basic-addon1">
+                </div>
+			    
+                <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Hora de ir embora :)</span>
+                      </div>
+                      <input id="B03" type="text" class="form-control" placeholder="HH:mm" aria-label="HrSaida" aria-describedby="basic-addon1" readonly>
+                </div>
+                
+                <div class="teste">
+                     <button onclick="getOutputHour();" class="btn btn-danger" id="menu-toggle">Calcular</button>
+                </div>
+                
+            </div>
+        </div>
+            
+    </div>
+
+    <div class="footer">
+        <div id="add" class="container-fluid">
+            <a id="addInput" href="javascript:void(0)"><img src="img/add.png" width="40" height="35"/></a>
+        </div>
+        
+    </div>
+
+    
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../../template/vendor/jquery/jquery.min.js"></script>
+    <script src="../../template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        
+        var count = 1;
+        function getOutputHour(){
+            document.getElementById('alert').style.display = "none";
+            var hrInput = $('#B00')[0].value;
+            var div = $('#page-content-wrapper');
+            var interval = moment("00:00", 'HH:mm');
+            var hrSaldo = mnSaldo = "00";
+            
+            if(hrInput){
+                
+                if(moment($('#inputBanco')[0].value)){
+                    hrSaldo = moment($('#inputBanco')[0].value, "HH:mm").format("HH:mm").split(':')[0];
+                    mnSaldo = moment($('#inputBanco')[0].value, "HH:mm").format("HH:mm").split(':')[1];
+                }
+                
+                for(var i=0 ; i<count ; i++){
+                    var hrSaida = moment($('#inputSaida'+i+'')[0].value, 'HH:mm').hours();
+                    var mnSaida = moment($('#inputSaida'+i+'')[0].value, 'HH:mm').minutes();
+                    var hrEntrada = moment($('#inputEntrada'+i+'')[0].value, 'HH:mm');
+                    hrEntrada.subtract(hrSaida, 'hours').subtract(mnSaida, 'minutes');
+                    interval.add(moment(hrEntrada._d).format('HH'), 'hours');
+                    interval.add(moment(hrEntrada._d).format('mm'), 'minutes');
+                }
+                
+                if(interval.hours()<1){
+                    interval = moment("01:00", "HH:mm");
+                }
+    
+                var hrOutput = moment(hrInput, "HH:mm").add((8+interval.hours()), "hours").add((interval.minutes()), "minutes");
+                hrOutput = moment(hrOutput, "HH:mm").subtract(hrSaldo, "hour"); 
+                hrOutput = moment(hrOutput, "HH:mm").subtract(mnSaldo, "minutes"); 
+                // var hrOutput = this.calculateTime(hrInput, hrLunch, hrReturn);
+                
+                $('#B03')[0].value = hrOutput.format('HH:mm');
+            } else {
+                document.getElementById('alert').style.display = "flex";
+            }
+        };
+        
+       function newField(){
+          $('.input-group mb-3').append('<input id="B05" type="text" class="form-control" placeholder="HH:mm" aria-label="HrRegresso" aria-describedby="basic-addon1">');
+       };
+       
+       $(function () {
+    	    var scntDiv = $('#intervals');
+    	    $(document).on('click', '#addInput', function () {
+    	        $('<p>'+
+    	            '<div id="dynamic'+count+'">'+
+        	            '<h3>Intervalo '+(count+1)+'</h3>'+
+                		'<div class="input-group mb-3" id="interval">'+
+                            '<div class="input-group-prepend">'+
+                                '<span class="input-group-text" width="80px !important" id="basic-addon1">Horário de Saída </span>'+
+                            '</div>'+
+                            '<input id="inputSaida'+count+'" type="time" class="form-control" placeholder="HH:mm" aria-label="HrSaida" aria-describedby="basic-addon1">'+
+                        '</div>'+
+                		'<div class="input-group mb-3" id="interval">'+
+                            '<div class="input-group-prepend">'+
+                                '<span class="input-group-text" id="basic-addon1">Horário de Entrada </span>'+
+                            '</div>'+
+                            '<input id="inputEntrada'+count+'" type="time" class="form-control" placeholder="HH:mm" aria-label="HrEntrada" aria-describedby="basic-addon1">'+
+                        '</div>'+
+                        '<a class="btn btn-danger" href="javascript:void(0)" id="remInput">'+
+    			        	'<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>'+
+    			        	'Remover Intervalo'+    
+    					'</a>'+
+                    '</div>'+
+    			'</p>').appendTo(scntDiv);
+    			count++;
+    	        return false;
+    	    });
+    	    
+    	    $(document).on('click', '#remInput', function (event) {
+    	        var buttonRemove = event.currentTarget;
+	            buttonRemove.parentElement.remove();
+	            count--;
+		        return false;
+		    });
+       });
+       
+       $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        
+        
+    </script>
+
+</body>
+
+</html>
